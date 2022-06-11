@@ -1,19 +1,68 @@
 @import common
 @import inputs
 
-// test grid. can be removed
-
 main
   width: 100%
   height: 100%
-  display: grid
-  grid-template: 64px 1fr 64px / 64px 1fr 64px
+  padding: 10vmin
+  display: flex
+  flex-direction: column
+  font-size: 13px
 
-  div
-    display: flex
-    align-items: center
-    justify-content: center
-    overflow: hidden
-    font-size: calc(var(--size) * 4)
-    white-space: pre-line
-    line-height: 0.6
+  > h1
+    margin: auto 0
+    padding: 8px
+    color: $color2
+    background-color: $color0
+    display: inline-block
+    width: min-content
+    white-space: nowrap
+
+  > .center
+    margin: auto 0
+    height: 75vh
+    display: grid
+    grid-template-rows: 256px 1fr
+    row-gap: 16px
+
+    > .preview
+      display: flex
+      padding: 16px
+      column-gap: 16px
+      background-color: $color1
+
+      > canvas
+        flex: 1 0 0
+        padding: 1px 0
+        background-color: $color0
+
+      > .settings
+        flex: 0 0 256px
+        background-color: $color0
+
+    > .editor
+      padding: 16px
+      background-color: $color1
+      display: flex
+      flex-direction: column
+
+      > textarea
+        flex: 1 0 0
+        //noinspection CssInvalidPropertyValue
+        width: -webkit-fill-available
+        color: rgba(white, 0.7)
+        background-color: $color0
+        resize: none
+        outline: none
+        border: none
+        box-sizing: border-box
+
+      > code.error-message
+        background-color: red
+
+    > footer
+      a
+        font-size: inherit
+        font-family: inherit
+        color: $color3
+        text-decoration: none
