@@ -1,0 +1,19 @@
+@import common
+@import inputs
+
+// test grid. can be removed
+
+main
+  width: 100%
+  height: 100%
+  display: grid
+  grid-template: 64px 1fr 64px / 64px 1fr 64px
+
+  div
+    display: flex
+    align-items: center
+    justify-content: center
+    overflow: hidden
+    font-size: calc(var(--size) * 4)
+    white-space: pre-line
+    line-height: 0.6
