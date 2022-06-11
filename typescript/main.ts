@@ -1,8 +1,5 @@
-import {LimiterWorklet} from "./audio/limiter/worklet.js"
-import {MeterWorklet} from "./audio/meter/worklet.js"
-import {MetronomeWorklet} from "./audio/metronome/worklet.js"
-import {CodeEditor, Preview, SignalRenderer} from "./automation.js"
-import {Boot, newAudioContext, preloadImagesOfCssFile} from "./lib/boot.js"
+import {CodeEditor, Preview, SignalRenderer, UserInterface} from "./automation.js"
+import {Boot, preloadImagesOfCssFile} from "./lib/boot.js"
 import {HTML} from "./lib/dom.js"
 
 const showProgress = (() => {
@@ -20,10 +17,6 @@ const showProgress = (() => {
     const boot = new Boot()
     boot.addObserver(boot => showProgress(boot.normalizedPercentage()))
     boot.registerProcess(preloadImagesOfCssFile("./bin/main.css"))
-    const context = newAudioContext()
-    boot.registerProcess(LimiterWorklet.loadModule(context))
-    boot.registerProcess(MeterWorklet.loadModule(context))
-    boot.registerProcess(MetronomeWorklet.loadModule(context))
     await boot.waitForCompletion()
 
     // --- BOOT ENDS ---
@@ -31,6 +24,7 @@ const showProgress = (() => {
     const signalRenderer = new SignalRenderer()
     const codeEditor = new CodeEditor(HTML.query('textarea'), HTML.query('.error-message'))
     const preview = new Preview(HTML.query('canvas'))
+    const userInterface = new UserInterface(HTML.query('.settings'), preview, codeEditor, signalRenderer)
     signalRenderer.renderer.addObserver(buffer => preview.setBuffer(buffer))
     signalRenderer.error.addObserver(message => codeEditor.showMessage(message))
     codeEditor.compiler.addObserver(func => signalRenderer.update(func))

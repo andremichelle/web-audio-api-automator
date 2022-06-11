@@ -9,6 +9,7 @@ import {
     Terminable,
     Terminator
 } from "./common.js"
+import {HTML} from "./dom.js"
 import {Checkbox, Editor, NumericInput, NumericStepperInput, SelectInput} from "./inputs.js"
 
 class NumericInputFactory {
@@ -121,6 +122,12 @@ export class UIControllerLayout implements Terminable {
         const input = CheckboxFactory.create()
         this.append(UIControllerLayout.createLabel(labelText), input[0])
         return this.terminator.with(input[1])
+    }
+
+    createTitle(labelText: string): HTMLHeadingElement {
+        const headingElement = HTML.create('h1', {textContent: labelText})
+        this.container.appendChild(headingElement)
+        return headingElement
     }
 
     terminate(): void {

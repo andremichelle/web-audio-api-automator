@@ -4,13 +4,13 @@
 main
   width: 100%
   height: 100%
-  padding: 10vmin
+  padding: 20vmin
   display: flex
   flex-direction: column
   font-size: 13px
 
   > h1
-    margin: auto 0
+    margin: 3vmin 0 0 0
     padding: 8px
     color: $color2
     background-color: $color0
@@ -22,7 +22,7 @@ main
     margin: auto 0
     height: 75vh
     display: grid
-    grid-template-rows: 256px 1fr
+    grid-template-rows: 288px 1fr
     row-gap: 16px
 
     > .preview
@@ -37,8 +37,12 @@ main
         background-color: $color0
 
       > .settings
-        flex: 0 0 256px
+        flex: 0 0 auto
+        padding: 4px 16px
         background-color: $color0
+        display: flex
+        flex-direction: column
+        row-gap: 8px
 
     > .editor
       padding: 16px
@@ -58,10 +62,26 @@ main
         box-sizing: border-box
 
       > code.error-message
+        color: white
         background-color: red
 
     > footer
+      display: flex
+      flex-direction: column
+
+      hr
+        //noinspection CssInvalidPropertyValue
+        width: -webkit-fill-available
+        height: 1px
+        border: none
+        background-color: $color1
+
+      div
+        display: grid
+        grid-template-columns: repeat(2, 1fr)
+
       a
+        font-weight: bold
         font-size: inherit
         font-family: inherit
         color: $color3

@@ -31,8 +31,9 @@
 // https://www.w3.org/TR/webaudio/#example1-AudioParam
 const curveLength = 44100
 const curve = new Float32Array(curveLength)
-for (let i = 0; i < curveLength; ++i)
+for (let i = 0; i < curveLength; ++i) {
     curve[i] = Math.sin(Math.PI * i / curveLength)
+}
 const t0 = 0
 const t1 = 0.1
 const t2 = 0.2
@@ -59,6 +60,16 @@ param.setValueAtTime(1.0, t0)
         </div>
         <footer>
             <a href="https://developer.mozilla.org/en-US/docs/Web/API/AudioParam#methods" target="_blank">AudioParam - Web APIs | MDN</a>
+            <hr>
+            <div>
+                <a href="https://developer.mozilla.org/en-US/docs/Web/API/AudioParam/setValueAtTime" target="_blank">setValueAtTime(value, startTime)</a>
+                <a href="https://developer.mozilla.org/en-US/docs/Web/API/AudioParam/linearRampToValueAtTime" target="_blank">linearRampToValueAtTime(value, endTime)</a>
+                <a href="https://developer.mozilla.org/en-US/docs/Web/API/AudioParam/exponentialRampToValueAtTime" target="_blank">exponentialRampToValueAtTime(value, endTime)</a>
+                <a href="https://developer.mozilla.org/en-US/docs/Web/API/AudioParam/setTargetAtTime" target="_blank">setTargetAtTime(target, startTime, timeConstant)</a>
+                <a href="https://developer.mozilla.org/en-US/docs/Web/API/AudioParam/setValueCurveAtTime" target="_blank">setValueCurveAtTime(values, startTime, duration)</a>
+                <a href="https://developer.mozilla.org/en-US/docs/Web/API/AudioParam/cancelScheduledValues" target="_blank">cancelScheduledValues(startTime)</a>
+                <a href="https://developer.mozilla.org/en-US/docs/Web/API/AudioParam/cancelAndHoldAtTime" target="_blank">cancelAndHoldAtTime(cancelTime)</a>
+            </div>
         </footer>
     </div>
 </main>

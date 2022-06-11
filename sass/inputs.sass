@@ -13,7 +13,7 @@ button
   border-radius: 2px
   text-align: center
   appearance: none
-  padding: 0
+  padding: 0 2px
   border: none
   outline: none
   background-color: $background
@@ -121,7 +121,7 @@ select
 div.two-columns
   display: grid
   align-items: center
-  grid-template-columns: minmax(80px, 1fr) 84px
+  grid-template-columns: 1fr 104px
   row-gap: 3px
   column-gap: 4px
   line-height: $SIZE
@@ -133,6 +133,11 @@ div.two-columns
     border-radius: 2px
 
   > .empty
+    grid-column: 1 / 3
+
+  > h1
+    color: rgba(white, 0.5)
+    font-size: 11px
     grid-column: 1 / 3
 
   label
@@ -149,7 +154,7 @@ div.two-columns
 
   fieldset.stepper
     display: grid
-    grid-template-columns: $SIZE 40px $SIZE
+    grid-template-columns: $SIZE 64px $SIZE
     column-gap: 1px
     font-size: $FONT_SIZE
     outline: none
