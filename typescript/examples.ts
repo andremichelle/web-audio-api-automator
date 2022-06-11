@@ -69,5 +69,32 @@ export const examples: Format[] = [
             'param.linearRampToValueAtTime(sustain, 0.4) // decay\n' +
             'param.setValueAtTime(sustain, 0.7) // sustain\n' +
             'param.linearRampToValueAtTime(0.0, 1.0) // release'
+    },
+    {
+        name: 'adsr (timeConstant)',
+        min: 0.0,
+        max: 1.0,
+        start: 0.0,
+        end: 1000.0,
+        duration: 1000.0,
+        exponential: false,
+        code: 'const setTargetWithin = ((param, startValue, targetValue, startTime, endTime, timeConstant) => {\n' +
+            '    const solve = (v0, v, t0, t, tc) => {\n' +
+            '        const tmp = Math.exp((t0 - t) / tc)\n' +
+            '        return (tmp * v0 - v) / (tmp - 1.0)\n' +
+            '    }\n' +
+            '    return (param, startValue, targetValue, startTime, endTime, timeConstant) => {\n' +
+            '        param.setTargetAtTime(solve(startValue, targetValue, startTime, endTime, timeConstant), startTime, timeConstant)\n' +
+            '        param.setValueAtTime(targetValue, endTime)\n' +
+            '    };\n' +
+            '})()\n' +
+            '\n' +
+            'const a = 0.1\n' +
+            'const d = 0.25\n' +
+            'const s = 0.5\n' +
+            'const r = 0.25\n' +
+            'setTargetWithin(param, 0.0, 1.0, 0.0, a, 0.1)\n' +
+            'setTargetWithin(param, 1.0, s, a, a + d, 0.1)\n' +
+            'setTargetWithin(param, s, 0.0, 1.0 - r, 1.0, 0.1)'
     }
 ]

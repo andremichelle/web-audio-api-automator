@@ -37,6 +37,7 @@ const showProgress = (() => {
         button.addEventListener('click', () => userInterface.setFormat(example))
         exampleButtons.appendChild(button)
     })
+    userInterface.setFormat(examples[0])
 
     // prevent dragging entire document on mobile
     document.addEventListener('touchmove', (event: TouchEvent) => event.preventDefault(), {passive: false})
