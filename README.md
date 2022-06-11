@@ -1,5 +1,5 @@
-# typescript / sass
-template repository for my typescript projects
+# Web Audio Api Automator
+A simple code editor which previews AudioParam automations.
 
 Make sure to have sass installed and run in the console:
 
