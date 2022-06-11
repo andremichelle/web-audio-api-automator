@@ -1,4 +1,5 @@
-import {CodeEditor, Preview, SignalRenderer, UserInterface} from "./automation.js"
+import {CodeEditor, Format, Preview, SignalRenderer, UserInterface} from "./automation.js"
+import {examples} from "./examples.js"
 import {Boot, preloadImagesOfCssFile} from "./lib/boot.js"
 import {HTML} from "./lib/dom.js"
 
@@ -29,6 +30,13 @@ const showProgress = (() => {
     signalRenderer.error.addObserver(message => codeEditor.showMessage(message))
     codeEditor.compiler.addObserver(func => signalRenderer.update(func))
     codeEditor.compile()
+
+    const exampleButtons = HTML.query('.examples')
+    examples.forEach((example: Format, index: number) => {
+        const button = HTML.create('button', {textContent: example.name})
+        button.addEventListener('click', () => userInterface.setFormat(example))
+        exampleButtons.appendChild(button)
+    })
 
     // prevent dragging entire document on mobile
     document.addEventListener('touchmove', (event: TouchEvent) => event.preventDefault(), {passive: false})

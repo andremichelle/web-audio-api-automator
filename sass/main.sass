@@ -22,8 +22,8 @@ main
     margin: auto 0
     height: 75vh
     display: grid
-    grid-template-rows: 288px 1fr
-    row-gap: 16px
+    grid-template-rows: 288px min-content 1fr
+    row-gap: 8px
 
     > .preview
       display: flex
@@ -31,18 +31,36 @@ main
       column-gap: 16px
       background-color: $color1
 
-      > canvas
+      > .canvas
         flex: 1 0 0
         padding: 1px 0
         background-color: $color0
+        position: relative
+
+        canvas
+          width: 100%
+          height: 100%
+          position: absolute
 
       > .settings
-        flex: 0 0 auto
+        flex: 0 0 160px
         padding: 4px 16px
         background-color: $color0
         display: flex
         flex-direction: column
         row-gap: 8px
+
+    > .examples
+      display: flex
+      column-gap: 8px
+
+      > span
+        color: $color3
+        font-weight: bold
+
+      > button
+        padding: 0 4px
+        min-width: 40px
 
     > .editor
       padding: 16px

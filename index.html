@@ -22,40 +22,15 @@
     <h1>Web Audio Api | Automator Editor</h1>
     <div class="center">
         <div class="preview">
-            <canvas></canvas>
+            <div class="canvas"><canvas></canvas></div>
             <div class="settings"></div>
+        </div>
+        <div class="examples">
+            <span>Examples:</span>
         </div>
         <div class="editor">
             <!--suppress HtmlFormInputWithoutLabel -->
-            <textarea spellcheck="false">
-// https://www.w3.org/TR/webaudio/#example1-AudioParam
-const curveLength = 44100
-const curve = new Float32Array(curveLength)
-for (let i = 0; i < curveLength; ++i) {
-    curve[i] = Math.sin(Math.PI * i / curveLength)
-}
-const t0 = 0
-const t1 = 0.1
-const t2 = 0.2
-const t3 = 0.3
-const t4 = 0.325
-const t5 = 0.5
-const t6 = 0.6
-const t7 = 0.7
-const t8 = 1.0
-const timeConstant = 0.1
-param.setValueAtTime(0.2, t0)
-param.setValueAtTime(0.3, t1)
-param.setValueAtTime(0.4, t2)
-param.linearRampToValueAtTime(1, t3)
-param.linearRampToValueAtTime(0.8, t4)
-param.setTargetAtTime(.5, t4, timeConstant)
-param.setValueAtTime(0.5 + (0.8 - 0.5) * Math.exp(-(t5 - t4) / timeConstant), t5)
-param.exponentialRampToValueAtTime(0.75, t6)
-param.exponentialRampToValueAtTime(0.01, t7)
-param.setValueCurveAtTime(curve, t7, t8 - t7)
-param.setValueAtTime(1.0, t0)
-            </textarea>
+            <textarea spellcheck="false"></textarea>
             <code class="error-message"></code>
         </div>
         <footer>

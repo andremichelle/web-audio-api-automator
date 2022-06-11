@@ -5,11 +5,23 @@ import {
     ObservableValueImpl,
     Option,
     Options,
-    PrintMapping
+    PrintMapping,
+    Waiting
 } from "./lib/common.js"
 import {UIControllerLayout} from "./lib/controls.js"
 import {HTML} from "./lib/dom.js"
 import {Exp, Linear} from "./lib/mapping.js"
+
+export interface Format {
+    name: string,
+    start: number
+    end: number
+    duration: number
+    min: number
+    max: number
+    exponential: boolean
+    code: string
+}
 
 export class SignalRenderer {
     readonly renderer: ObservableImpl<AudioBuffer> = new ObservableImpl<AudioBuffer>()
@@ -32,26 +44,31 @@ export class SignalRenderer {
         }
         this.rendering = true
         this.hasChanges = false
-        this.render(func)
-            .then((buffer: AudioBuffer) => {
+        Waiting.forFrame().then(() =>
+            this.render()
+                .then((buffer: AudioBuffer) => {
+                    this.rendering = false
+                    if (this.hasChanges) {
+                        this.hasChanges = false
+                        this.update(this.func.get())
+                    } else {
+                        this.renderer.notify(buffer)
+                    }
+                }).catch(e => {
                 this.rendering = false
-                if (this.hasChanges) {
-                    this.hasChanges = false
-                    this.update(this.func.get())
+                if (e instanceof Error) {
+                    this.error.notify(e.message)
                 } else {
-                    this.renderer.notify(buffer)
+                    throw e
                 }
-            }).catch(e => {
-            this.rendering = false
-            if (e instanceof Error) {
-                this.error.notify(e.message)
-            } else {
-                throw e
-            }
-        })
+            }))
     }
 
-    async render(func: Function): Promise<AudioBuffer> {
+    async render(): Promise<AudioBuffer> {
+        if (this.func.isEmpty()) {
+            return Promise.reject(new Error('No valid code compiled'))
+        }
+        const func = this.func.get()
         const sampleRate = 10000
         const seconds = this.duration.get() / 1000.0
         const length = Math.ceil(sampleRate * seconds)
@@ -151,7 +168,10 @@ export class Preview {
 }
 
 export class UserInterface {
-    constructor(readonly element: HTMLElement, preview: Preview, codeEditor: CodeEditor, signalRenderer: SignalRenderer) {
+    constructor(readonly element: HTMLElement,
+                readonly preview: Preview,
+                readonly codeEditor: CodeEditor,
+                readonly signalRenderer: SignalRenderer) {
         const PrintMappingTime = PrintMapping.float(0, '', 'ms')
         const PrintMappingValue = PrintMapping.float(2, '', '')
         const layout = new UIControllerLayout()
@@ -168,6 +188,16 @@ export class UserInterface {
         element.appendChild(layout.element())
         element.appendChild(compileButton)
     }
+
+    setFormat(format: Format): void {
+        this.preview.min.set(format.min)
+        this.preview.max.set(format.max)
+        this.preview.exponential.set(format.exponential)
+        this.preview.start.set(format.start)
+        this.preview.end.set(format.end)
+        this.signalRenderer.duration.set(format.duration)
+        this.codeEditor.setCode(format.code)
+    }
 }
 
 export class CodeEditor {
@@ -180,6 +210,11 @@ export class CodeEditor {
                 this.compile()
             }
         })
+    }
+
+    setCode(code: string) {
+        this.element.value = code
+        this.compile()
     }
 
     compile(): void {
