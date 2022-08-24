@@ -46,10 +46,10 @@ export declare class UserInterface {
     setFormat(format: Format): void;
 }
 export declare class CodeEditor {
-    readonly element: HTMLTextAreaElement;
+    readonly editor: Editor;
     readonly errorField: HTMLElement;
     readonly compiler: ObservableImpl<Function>;
-    constructor(element: HTMLTextAreaElement, errorField: HTMLElement);
+    constructor(editor: Editor, errorField: HTMLElement);
     setCode(code: string): void;
     compile(): void;
     showMessage(message: string | ''): void;

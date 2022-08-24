@@ -33,3 +33,8 @@ interface FontFaceSet {
 declare interface Document {
     fonts: FontFaceSet
 }
+
+declare interface Editor {
+    setValue(value: string): void
+    getValue(): string
+}

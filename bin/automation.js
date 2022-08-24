@@ -173,8 +173,8 @@ export class UserInterface {
     }
 }
 export class CodeEditor {
-    constructor(element, errorField) {
-        this.element = element;
+    constructor(editor, errorField) {
+        this.editor = editor;
         this.errorField = errorField;
         this.compiler = new ObservableImpl();
         window.addEventListener('keydown', (event) => {
@@ -185,14 +185,14 @@ export class CodeEditor {
         });
     }
     setCode(code) {
-        this.element.value = code;
+        this.editor.setValue(code);
         this.compile();
     }
     compile() {
         this.errorField.textContent = '';
         let f = null;
         try {
-            f = Function('param', this.element.value);
+            f = Function('param', this.editor.getValue());
         }
         catch (e) {
             if (e instanceof Error) {

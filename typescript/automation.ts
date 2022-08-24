@@ -8,9 +8,9 @@ import {
     PrintMapping,
     Waiting
 } from "./lib/common.js"
-import {UIControllerLayout} from "./lib/controls.js"
-import {HTML} from "./lib/dom.js"
-import {Exp, Linear} from "./lib/mapping.js"
+import { UIControllerLayout } from "./lib/controls.js"
+import { HTML } from "./lib/dom.js"
+import { Exp, Linear } from "./lib/mapping.js"
 
 export interface Format {
     name: string,
@@ -55,13 +55,13 @@ export class SignalRenderer {
                         this.renderer.notify(buffer)
                     }
                 }).catch(e => {
-                this.rendering = false
-                if (e instanceof Error) {
-                    this.error.notify(e.message)
-                } else {
-                    throw e
-                }
-            }))
+                    this.rendering = false
+                    if (e instanceof Error) {
+                        this.error.notify(e.message)
+                    } else {
+                        throw e
+                    }
+                }))
     }
 
     async render(): Promise<AudioBuffer> {
@@ -136,10 +136,10 @@ export class Preview {
     }
 
     plot(values: Float32Array,
-         x0: number, x1: number,
-         y0: number, y1: number,
-         s0: number, s1: number,
-         minValue: number, maxValue: number) {
+        x0: number, x1: number,
+        y0: number, y1: number,
+        s0: number, s1: number,
+        minValue: number, maxValue: number) {
         const samplesEachPixel = (s1 - s0) / (x1 - x0)
         const scale = (y1 - y0 - 1) / (maxValue - minValue)
         const pixelOverFlow = x0 - Math.floor(x0)
@@ -169,9 +169,9 @@ export class Preview {
 
 export class UserInterface {
     constructor(readonly element: HTMLElement,
-                readonly preview: Preview,
-                readonly codeEditor: CodeEditor,
-                readonly signalRenderer: SignalRenderer) {
+        readonly preview: Preview,
+        readonly codeEditor: CodeEditor,
+        readonly signalRenderer: SignalRenderer) {
         const PrintMappingTime = PrintMapping.float(0, '', 'ms')
         const PrintMappingValue = PrintMapping.float(2, '', '')
         const layout = new UIControllerLayout()
@@ -183,7 +183,7 @@ export class UserInterface {
         layout.createNumericStepper('min', PrintMappingValue, NumericStepper.Hundredth).with(preview.min)
         layout.createNumericStepper('max', PrintMappingValue, NumericStepper.Hundredth).with(preview.max)
         layout.createCheckbox('linear・exp').with(preview.exponential)
-        const compileButton = HTML.create('button', {textContent: 'compile (alt+enter)'})
+        const compileButton = HTML.create('button', { textContent: 'compile (alt+enter)' })
         compileButton.addEventListener('click', () => codeEditor.compile())
         element.appendChild(layout.element())
         element.appendChild(compileButton)
@@ -203,7 +203,7 @@ export class UserInterface {
 export class CodeEditor {
     readonly compiler: ObservableImpl<Function> = new ObservableImpl<Function>()
 
-    constructor(readonly element: HTMLTextAreaElement, readonly errorField: HTMLElement) {
+    constructor(readonly editor: Editor, readonly errorField: HTMLElement) {
         window.addEventListener('keydown', (event: KeyboardEvent) => {
             if (event.altKey && event.key === 'Enter') {
                 event.preventDefault()
@@ -213,7 +213,7 @@ export class CodeEditor {
     }
 
     setCode(code: string) {
-        this.element.value = code
+        this.editor.setValue(code)
         this.compile()
     }
 
@@ -221,7 +221,7 @@ export class CodeEditor {
         this.errorField.textContent = ''
         let f = null
         try {
-            f = Function('param', this.element.value)
+            f = Function('param', this.editor.getValue())
         } catch (e) {
             if (e instanceof Error) {
                 this.showMessage(e.name)

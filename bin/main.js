@@ -21,10 +21,18 @@ const showProgress = (() => {
     console.debug("booting...");
     const boot = new Boot();
     boot.addObserver(boot => showProgress(boot.normalizedPercentage()));
+    boot.registerProcess(new Promise((resolve) => {
+        const id = setInterval(() => {
+            if (window["editor"] !== undefined) {
+                clearInterval(id);
+                resolve();
+            }
+        }, 5);
+    }));
     boot.registerProcess(preloadImagesOfCssFile("./bin/main.css"));
     yield boot.waitForCompletion();
     const signalRenderer = new SignalRenderer();
-    const codeEditor = new CodeEditor(HTML.query('textarea'), HTML.query('.error-message'));
+    const codeEditor = new CodeEditor(window['editor'], HTML.query('.error-message'));
     const preview = new Preview(HTML.query('canvas'));
     const userInterface = new UserInterface(HTML.query('.settings'), preview, codeEditor, signalRenderer);
     signalRenderer.renderer.addObserver(buffer => preview.setBuffer(buffer));

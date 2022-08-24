@@ -1,7 +1,8 @@
-import {CodeEditor, Format, Preview, SignalRenderer, UserInterface} from "./automation.js"
-import {examples} from "./examples.js"
-import {Boot, preloadImagesOfCssFile} from "./lib/boot.js"
-import {HTML} from "./lib/dom.js"
+import { Waiting } from './lib/common.js'
+import { CodeEditor, Format, Preview, SignalRenderer, UserInterface } from "./automation.js"
+import { examples } from "./examples.js"
+import { Boot, preloadImagesOfCssFile } from "./lib/boot.js"
+import { HTML } from "./lib/dom.js"
 
 const showProgress = (() => {
     const progress: SVGSVGElement = document.querySelector("svg.preloader")
@@ -17,13 +18,21 @@ const showProgress = (() => {
 
     const boot = new Boot()
     boot.addObserver(boot => showProgress(boot.normalizedPercentage()))
+    boot.registerProcess(new Promise<void>((resolve) => {
+        const id = setInterval(() => {
+            if (window["editor"] !== undefined) {
+                clearInterval(id)
+                resolve()
+            }
+        }, 5)
+    }))
     boot.registerProcess(preloadImagesOfCssFile("./bin/main.css"))
     await boot.waitForCompletion()
 
     // --- BOOT ENDS ---
 
     const signalRenderer = new SignalRenderer()
-    const codeEditor = new CodeEditor(HTML.query('textarea'), HTML.query('.error-message'))
+    const codeEditor = new CodeEditor(window['editor'], HTML.query('.error-message'))
     const preview = new Preview(HTML.query('canvas'))
     const userInterface = new UserInterface(HTML.query('.settings'), preview, codeEditor, signalRenderer)
     signalRenderer.renderer.addObserver(buffer => preview.setBuffer(buffer))
@@ -33,15 +42,15 @@ const showProgress = (() => {
 
     const exampleButtons = HTML.query('.examples')
     examples.forEach((example: Format, index: number) => {
-        const button = HTML.create('button', {textContent: example.name})
+        const button = HTML.create('button', { textContent: example.name })
         button.addEventListener('click', () => userInterface.setFormat(example))
         exampleButtons.appendChild(button)
     })
     userInterface.setFormat(examples[0])
 
     // prevent dragging entire document on mobile
-    document.addEventListener('touchmove', (event: TouchEvent) => event.preventDefault(), {passive: false})
-    document.addEventListener('dblclick', (event: Event) => event.preventDefault(), {passive: false})
+    document.addEventListener('touchmove', (event: TouchEvent) => event.preventDefault(), { passive: false })
+    document.addEventListener('dblclick', (event: Event) => event.preventDefault(), { passive: false })
     const resize = () => {
         document.body.style.height = `${window.innerHeight}px`
         preview.resize()

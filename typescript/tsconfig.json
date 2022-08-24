@@ -12,6 +12,7 @@
     "declaration": true
   },
   "include": [
+    "monaco.d.ts",
     "**/*.ts"
   ],
   "exclude": []
