@@ -33,9 +33,9 @@
             <div class="editor">
                 <!--suppress HtmlFormInputWithoutLabel -->
                 <div id="container" style="border:1px solid grey"></div>
-                <script src="./monaco-editor/min/vs/loader.js"></script>
+                <script src="./node_modules/monaco-editor/min/vs/loader.js"></script>
                 <script>
-                    require.config({ paths: { vs: './monaco-editor/min/vs' } })
+                    require.config({ paths: { vs: './node_modules/monaco-editor/min/vs' } })
 
                     require(['vs/editor/editor.main'], function () {
                         window.editor = monaco.editor.create(document.getElementById('container'), { language: 'javascript' })
