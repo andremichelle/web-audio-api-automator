@@ -34,7 +34,7 @@ jobs:
         with:
           source: ./
           destination: ./_site
-      - name: Install Dependencies
+      - name: Install Dependencies before upload
         run: npm install monaco-editor
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
